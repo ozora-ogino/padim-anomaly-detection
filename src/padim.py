@@ -251,6 +251,12 @@ class PaDiM:
         fpr, tpr, _ = roc_curve(gt_list, img_scores)
         img_roc_auc = roc_auc_score(gt_list, img_scores)
 
+        calculate_metrics(img_scores, gt_list, self.save_path / "recall-precision.png")
+        img_scores = np.where(img_scores > threshold, 1, 0)
+        from sklearn.metrics import accuracy_score
+
+        print("Accuracy:", accuracy_score(img_scores, gt_list))
+
         # Save ROC to png.
         self._save_roc(fpr, tpr, img_roc_auc)
 
@@ -282,6 +288,28 @@ class PaDiM:
         z = F.fold(z, kernel_size=s, output_size=(H1, W1), stride=s)
 
         return z
+
+
+def calculate_metrics(pred: np.ndarray, label: np.ndarray, save_path):
+    recall_list = []
+    precision_list = []
+    for threshold in np.arange(0.1, 1.0, 0.1):
+        _pred = np.where(pred < threshold, 0, 1)
+        hits = sum(_pred[_pred == label] == 1)
+        # Recall
+        recall = hits / sum(label == 1)
+        # Presicion
+        precision = hits / sum(_pred == 1)
+        recall_list.append(recall)
+        precision_list.append(precision)
+
+    fig = plt.figure(figsize=(12, 3))
+    plt.plot(np.arange(0.1, 1.0, 0.1), recall_list, label="recall")
+    plt.plot(np.arange(0.1, 1.0, 0.1), precision_list, label="precision")
+    plt.xlabel("Threshold")
+    plt.legend()
+    plt.tight_layout()
+    fig.savefig(save_path)
 
 
 def save_plot_fig(test_img, scores, threshold, save_dir, filenames_list):

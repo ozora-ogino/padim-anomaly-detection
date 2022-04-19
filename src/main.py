@@ -12,10 +12,11 @@ def parse_args():
     parser = argparse.ArgumentParser("PaDiM")
     parser.add_argument("--data_path", type=Path, default="data")
     parser.add_argument("--save_path", type=Path, default="./mvtec_result")
+    parser.add_argument("--threshold", type=float, default=0.5)
     parser.add_argument(
         "--arch",
         type=str,
-        choices=["resnet18", "wide_resnet50_2"],
+        choices=["resnet18", "wide_resnet50_2", "efficientnet"],
         default="wide_resnet50_2",
     )
     return parser.parse_args()
