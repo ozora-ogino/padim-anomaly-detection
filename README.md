@@ -10,15 +10,22 @@ This repository contains example codes of anomaly detection with PaDiM. Supporte
 ├── train
 │   ├── good
 │   │   ├── ok213.png
-│   └── not-good
-│       ├── manipulated_front008.png
 │    	...
 └── val
     ├── good
     └── not-good
 ```
 
+For convenience, you can use my utility scripts to create dataset automatically.
+To use it put `archive` on this project root directory, and run the following command.
 
+```bash
+make create_dataset
+```
+
+This will split train data for validation for you.
+
+NOTE: PaDiM only uses good cases to fit. So the train directory will only contain `good` directory. And all anomalies will be used for validation.
 ## How to run locally
 
 ### 1. Install dependency
@@ -57,7 +64,7 @@ make run_docker
 
 ## Reference
 
-I referred the following project.
-
 https://github.com/xiahaifeng1995/PaDiM-Anomaly-Detection-Localization-master
+
+Thomas Defard, Aleksandr Setkov, Angelique Loesch, Romaric Audigier. PaDiM: a Patch Distribution Modeling Framework for Anomaly Detection and Localization. https://arxiv.org/pdf/2011.08785
 
